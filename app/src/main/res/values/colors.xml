@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1e88e5</color>
+    <color name="colorPrimaryDark">#217AC8</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white70">#70ffffff</color>
+    <color name="white40">#40ffffff</color>
+    <color name="grid_back_color">#000000</color>
+    <color name="background_bg">#E7E7E7</color>
+    <color name="white_pressed">#FF679B</color>
+    <color name="half_black">#ffffff</color>
+
+
+    <color name="primary_text">#212121</color>
+    <color name="primary_color">#212121</color>
+
+
+    <color name="feed_item_bg">#ffffff</color>
+    <color name="feed_item_border">#c2c3c8</color>
+
+    <color name="abcedf">#abcdef</color>
+</resources>

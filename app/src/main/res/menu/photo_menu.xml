@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <!-- Back -->
+    <item
+        android:id="@+id/menu_back"
+        android:icon="@drawable/prev"
+        android:title="@string/menu_back"
+        app:showAsAction="always"/>
+
+    <!-- Play & Stop -->
+    <item
+        android:id="@+id/menu_play"
+        android:icon="@drawable/play"
+        android:title="@string/menu_share"
+        app:showAsAction="always"/>
+
+    <!-- next -->
+
+    <item
+        android:id="@+id/menu_next"
+        android:icon="@drawable/next"
+        android:title="@string/menu_next"
+        app:showAsAction="always"/>
+
+</menu>

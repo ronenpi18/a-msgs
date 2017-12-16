@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingRight="2dp"
+    android:paddingBottom="2dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageView_gifitem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#50000000"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/eye"/>
+
+        <TextView
+            android:id="@+id/textView_totviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="25"/>
+
+        <ImageView
+            android:id="@+id/imageView_favourite"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/fav_ind"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
