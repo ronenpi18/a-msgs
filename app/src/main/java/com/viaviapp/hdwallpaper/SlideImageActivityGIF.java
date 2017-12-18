@@ -313,7 +313,9 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
 
             View imageLayout = inflater.inflate(R.layout.viewpager_itemgif, container, false);
             assert imageLayout != null;
+//			TouchImageView imageView = (TouchImageView) imageLayout.findViewById(R.id.image);
             final SimpleDraweeView imageView = (SimpleDraweeView) imageLayout.findViewById(R.id.imagegif);
+
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
             new AsyncTask<String, String, String>() {
@@ -724,4 +726,6 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
             Constant.arrayListGIF.get(p).setTotalViews(""+(tot+1));
         }
     }
+
+
 }

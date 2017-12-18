@@ -228,6 +228,15 @@ public class RequestActivity extends AppCompatActivity {
         writeToFile("",getApplicationContext(),"wall_selected.txt");
         writeToFile("",getApplicationContext(),"isStGIF.txt");
         writeToFile("",getApplicationContext(),"isStWall.txt");
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        send.setEnabled(true);
+        send.setVisibility(View.VISIBLE);
+        wallpaper.setEnabled(true);
+        wallpaper.setVisibility(View.VISIBLE);
+        gifs.setEnabled(true);
+        gifs.setVisibility(View.VISIBLE);
+
     }
 
     public void onClickSend(View view){

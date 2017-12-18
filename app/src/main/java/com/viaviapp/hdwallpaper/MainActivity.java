@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		if(Locale.getDefault().getDisplayLanguage().equals("he")){
+
+		}
 		OneSignal.startInit(this).init();
 		setTheme(Constant.theme);
 		setContentView(R.layout.activity_main);
@@ -146,7 +150,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		LatestFragment f1 = new LatestFragment();
 		loadFrag(f1,getResources().getString(R.string.latest),fm);
-		toolbar.setTitle(getResources().getString(R.string.latest));
+//		toolbar.setTitle(getResources().getString(R.string.latest));
+		if(Locale.getDefault().getDisplayLanguage().equals("ru")){
+			toolbar.setTitle("последний");
+//			changeNavItemBG("последний");
+
+		}
+		if(Locale.getDefault().getDisplayLanguage().equals("he")){
+			toolbar.setTitle("אחרונים");
+//			changeNavItemBG("אחרונים");
+		}
+		else {
+			toolbar.setTitle(getResources().getString(R.string.latest));
+
+//			changeNavItemBG("latest");
+		}
 
 		Typeface tf = Typeface.createFromAsset(getAssets(),"lator.ttf");
 		textView_latest.setTypeface(tf);
@@ -187,10 +205,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if (id == R.id.textView_latest) {
 			LatestFragment f1 = new LatestFragment();
 			loadFrag(f1,"latest",fm);
-			toolbar.setTitle(getResources().getString(R.string.latest));
+			if(Locale.getDefault().getDisplayLanguage().toLowerCase().equals("ru")){
+				toolbar.setTitle("последний");
+				changeNavItemBG("последний");
 
-			changeNavItemBG("latest");
+			}
+			if(Locale.getDefault().getDisplayLanguage().toLowerCase().equals("he")){
+				toolbar.setTitle("אחרונים");
+				changeNavItemBG("אחרונים");
+			}
+			else {
+				toolbar.setTitle(getResources().getString(R.string.latest));
 
+				changeNavItemBG("latest");
+			}
 		} else if (id == R.id.textView_cat) {
 			AllPhotosFragment f1 = new AllPhotosFragment();
 			loadFrag(f1,"cat",fm);

@@ -29,13 +29,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.adapter.AdapterGIF;
+import com.example.adapter.AdapterImage;
 import com.example.item.ItemPhotos;
 import com.example.util.Constant;
 import com.example.util.DBHelper;
 import com.example.util.JsonUtils;
 import com.example.util.TouchImageView;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.ads.AdRequest;
@@ -43,6 +55,12 @@ import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -328,6 +346,8 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 			return Constant.arrayList.size();
 
 		}
+		RequestQueue requestQueue;
+		static final String REQ_TAG = "VACTIVITY";
 
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
@@ -337,25 +357,120 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
 
-			View imageLayout = inflater.inflate(R.layout.viewpager_item, container, false);
+			View imageLayout = inflater.inflate(R.layout.viewpager_itemgif, container, false);
 			assert imageLayout != null;
-			TouchImageView imageView = (TouchImageView) imageLayout.findViewById(R.id.image);
+//			TouchImageView imageView = (TouchImageView) imageLayout.findViewById(R.id.image);
+			final SimpleDraweeView imageView = (SimpleDraweeView) imageLayout.findViewById(R.id.imagegif);
+
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-			Picasso.with(SlideImageActivity.this)
-					.load(Constant.arrayList.get(position).getImage().replace(" ", "%20"))
-					.placeholder(R.mipmap.placeholder)
-					.into(imageView, new Callback() {
-						@Override
-						public void onSuccess() {
-							spinner.setVisibility(View.GONE);
-						}
+			new AsyncTask<String, String, String>() {
+				float aspect_ratio;
+				@Override
+				protected String doInBackground(String... strings) {
+					final Bitmap image;
+					try {
+						image = Picasso.with(SlideImageActivity.this).load(Constant.arrayList.get(Integer.parseInt(strings[0])).getImage().replace(" ","%20")).get();
+						float width = image.getWidth();
+						float height = image.getHeight();
+						aspect_ratio = width/height;
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return strings[0];
+				}
 
-						@Override
-						public void onError() {
-							spinner.setVisibility(View.GONE);
-						}
-					});
+				@Override
+				protected void onPostExecute(String s) {
+					if(aspect_ratio > 1) {
+						imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+						imageView.setAspectRatio(aspect_ratio);
+					}else if(aspect_ratio < 1) {
+						imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+						imageView.setAspectRatio(aspect_ratio);
+					}
+					final Uri uri = Uri.parse(Constant.arrayList.get(Integer.parseInt(s)).getImage().replace(" ","%20"));
+//					DraweeController controller = Fresco.newDraweeControllerBuilder()
+//							.setUri(uri)
+//							.setAutoPlayAnimations(true)
+//							.build();
+//					imageView.setController(controller);
+					String url = Constant.arrayList.get(Integer.parseInt(s)).getImage().replace(" ","%20");
+					String urlImageGif = "";
+					//	String url = getResources().getString(R.string.get_url);
+					final String finalUrl = url;
+
+					if(url.substring(url.length()-3).equals("gif")) {
+						///////////////////////
+						requestQueue = Volley.newRequestQueue(getApplicationContext());
+						StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
+								new Response.Listener<String>() {
+									@Override
+									public void onResponse(String response) {
+										//	serverResp.setText("String Response : "+ response);
+										try {
+											//String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
+											JSONObject reader = new JSONObject(response);
+											JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
+											for (int i = 0; i < arrayOfObjs.length(); i++) {
+												JSONObject c = arrayOfObjs.getJSONObject(i);
+												String str = c.getString("gif_image");
+												if (str.substring(str.lastIndexOf("_") + 1).equals(finalUrl.substring(finalUrl.lastIndexOf("_") + 1))){
+													DraweeController controller = Fresco.newDraweeControllerBuilder()
+															.setUri(c.getString("gif_image"))//list.get(position).getImage().replace(" ", "%20"))
+															.setAutoPlayAnimations(true)
+															.build();
+													imageView.setController(controller);
+												}
+											}
+
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+									}
+								}, new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								//	serverResp.setText("Error getting response");
+							}
+						});
+
+						stringRequest.setTag(REQ_TAG);
+						requestQueue.add(stringRequest);
+
+						////
+//						url = url.replace("/categories/" + Constant.arrayList.get((Integer.parseInt(s))).getId(), "/images/animation");
+//						DraweeController controller = Fresco.newDraweeControllerBuilder()
+//								.setUri(url)//list.get(position).getImage().replace(" ", "%20"))
+//								.setAutoPlayAnimations(true)
+//								.build();
+//						imageView.setController(controller);
+					}else {
+						DraweeController controller = Fresco.newDraweeControllerBuilder()
+								.setUri(uri)
+								.setAutoPlayAnimations(true)
+								.build();
+						imageView.setController(controller);
+					}
+
+
+					super.onPostExecute(s);
+				}
+			}.execute(String.valueOf(position));
+//			Picasso.with(SlideImageActivity.this)
+//					.load(Constant.arrayList.get(position).getImage().replace(" ", "%20"))
+//					.placeholder(R.mipmap.placeholder)
+//					.into(imageView, new Callback() {
+//						@Override
+//						public void onSuccess() {
+//							spinner.setVisibility(View.GONE);
+//						}
+//
+//						@Override
+//						public void onError() {
+//							spinner.setVisibility(View.GONE);
+//						}
+//					});
 
 			container.addView(imageLayout, 0);
 			return imageLayout;
@@ -443,93 +558,181 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 		sensorManager.unregisterListener(this);
 	}	
 
-	public class SaveTask extends AsyncTask<String , String , String>
-	{
-		private Context context;
-		private ProgressDialog pDialog;
-		String image_url;
-		URL myFileUrl;
-		String myFileUrl1;
-		Bitmap bmImg = null;
-		File file ;
+//	public class SaveTask extends AsyncTask<String , String , String>
+//	{
+//		private Context context;
+//		private ProgressDialog pDialog;
+//		String image_url;
+//		URL myFileUrl;
+//		String myFileUrl1;
+//		Bitmap bmImg = null;
+//		File file ;
+//
+//		public SaveTask(Context context) {
+//			this.context = context;
+//		}
+//
+//		@Override
+//		protected void onPreExecute() {
+//			// TODO Auto-generated method stub
+//
+//			super.onPreExecute();
+//
+//			pDialog = new ProgressDialog(context,AlertDialog.THEME_HOLO_LIGHT);
+//			pDialog.setMessage(getResources().getString(R.string.download_image));
+//			pDialog.setIndeterminate(false);
+//			pDialog.setCancelable(false);
+//			pDialog.show();
+//
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... args) {
+//			// TODO Auto-generated method stub
+//
+//			try {
+//
+//				myFileUrl = new URL(args[0]);
+//				//myFileUrl1 = args[0];
+//
+//				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+//				conn.setDoInput(true);
+//				conn.connect();
+//				InputStream is = conn.getInputStream();
+//				bmImg = BitmapFactory.decodeStream(is);
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//			try {
+//
+//				String path = myFileUrl.getPath();
+//				String idStr = path.substring(path.lastIndexOf('/') + 1);
+//				File filepath = Environment.getExternalStorageDirectory();
+//				File dir = new File (filepath.getAbsolutePath() + Constant.DOWNLOAD_SDCARD_FOLDER_PATH_WALLPAPER);
+//				dir.mkdirs();
+//				String fileName = idStr;
+//				file = new File(dir, fileName);
+//				FileOutputStream fos = new FileOutputStream(file);
+//				bmImg.compress(CompressFormat.JPEG, 75, fos);
+//				fos.flush();
+//				fos.close();
+//
+//				MediaScannerConnection.scanFile(SlideImageActivity.this, new String[] { file.getAbsolutePath()},
+//						null,
+//						new MediaScannerConnection.OnScanCompletedListener() {
+//							@Override
+//							public void onScanCompleted(String path, Uri uri) {
+//
+//							}
+//						});
+//
+//			}
+//			catch (Exception e)
+//			{
+//				e.printStackTrace();
+//			}
+//			return null;
+//		}
+//
+//
+//		@Override
+//		protected void onPostExecute(String args) {
+//			// TODO Auto-generated method stub
+//			Toast.makeText(SlideImageActivity.this, getResources().getString(R.string.image_save_success), Toast.LENGTH_SHORT).show();
+//			pDialog.dismiss();
+//		}
+//	}
+public class SaveTask extends AsyncTask<String , String , String>
+{
+	private Context context;
+	private ProgressDialog pDialog;
+	URL myFileUrl;
+	File file ;
 
-		public SaveTask(Context context) {
-			this.context = context;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-
-			super.onPreExecute();
-
-			pDialog = new ProgressDialog(context,AlertDialog.THEME_HOLO_LIGHT);
-			pDialog.setMessage(getResources().getString(R.string.download_image));
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();
-
-		}
-
-		@Override
-		protected String doInBackground(String... args) {
-			// TODO Auto-generated method stub
-
-			try {  
-
-				myFileUrl = new URL(args[0]);
-				//myFileUrl1 = args[0];
-
-				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();   
-				conn.setDoInput(true);   
-				conn.connect();     
-				InputStream is = conn.getInputStream();
-				bmImg = BitmapFactory.decodeStream(is); 
-			}
-			catch (IOException e)
-			{       
-				e.printStackTrace();  
-			}
-			try {       
-
-				String path = myFileUrl.getPath();
-				String idStr = path.substring(path.lastIndexOf('/') + 1);
-				File filepath = Environment.getExternalStorageDirectory();
-				File dir = new File (filepath.getAbsolutePath() + Constant.DOWNLOAD_SDCARD_FOLDER_PATH_WALLPAPER);
-				dir.mkdirs();
-				String fileName = idStr;
-				file = new File(dir, fileName);
-				FileOutputStream fos = new FileOutputStream(file);
-				bmImg.compress(CompressFormat.JPEG, 75, fos);   
-				fos.flush();    
-				fos.close();
-
-				MediaScannerConnection.scanFile(SlideImageActivity.this, new String[] { file.getAbsolutePath()},
-						null,
-						new MediaScannerConnection.OnScanCompletedListener() {
-							@Override
-							public void onScanCompleted(String path, Uri uri) {
-
-							}
-						});
-
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();  
-			}
-			return null;   
-		}
-
-
-		@Override
-		protected void onPostExecute(String args) {
-			// TODO Auto-generated method stub
-			Toast.makeText(SlideImageActivity.this, getResources().getString(R.string.image_save_success), Toast.LENGTH_SHORT).show();
-			pDialog.dismiss();
-		}
+	public SaveTask(Context context) {
+		this.context = context;
 	}
 
+	@Override
+	protected void onPreExecute() {
+		// TODO Auto-generated method stub
+
+		super.onPreExecute();
+
+		pDialog = new ProgressDialog(context);
+		pDialog.setMessage(getResources().getString(R.string.download_gif));
+		pDialog.setIndeterminate(false);
+		pDialog.setCancelable(false);
+		pDialog.show();
+
+	}
+
+	@Override
+	protected String doInBackground(String... args) {
+		// TODO Auto-generated method stub
+
+		try {
+
+			myFileUrl = new URL(args[0]);
+			//myFileUrl1 = args[0];
+			String path = myFileUrl.getPath();
+			String idStr = path.substring(path.lastIndexOf('/') + 1);
+			File filepath = Environment.getExternalStorageDirectory();
+			File dir = new File (filepath.getAbsolutePath() + Constant.DOWNLOAD_SDCARD_FOLDER_PATH_WALLPAPER);
+			dir.mkdirs();
+			String fileName = idStr;
+			file = new File(dir, fileName);
+
+			HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+			conn.setDoInput(true);
+			conn.connect();
+			InputStream is = conn.getInputStream();
+
+			BufferedInputStream bis = new BufferedInputStream(is);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+			int current = 0;
+
+			while ((current = bis.read()) != -1) {
+				baos.write(current);
+			}
+
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(baos.toByteArray());
+
+			fos.flush();
+
+			fos.close();
+			is.close();
+
+			MediaScannerConnection.scanFile(SlideImageActivity.this, new String[] { file.getAbsolutePath()},
+					null,
+					new MediaScannerConnection.OnScanCompletedListener() {
+						@Override
+						public void onScanCompleted(String path, Uri uri) {
+
+						}
+					});
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	@Override
+	protected void onPostExecute(String args) {
+		// TODO Auto-generated method stub
+		Toast.makeText(SlideImageActivity.this, getResources().getString(R.string.gif_save_success), Toast.LENGTH_SHORT).show();
+		pDialog.dismiss();
+	}
+}
 	public class ShareTask extends AsyncTask<String , String , String>
 	{
 		private Context context;
@@ -644,4 +847,6 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 			Constant.arrayList.get(p).setTotalViews(""+(tot+1));
 		}
 	}
+
+
 }

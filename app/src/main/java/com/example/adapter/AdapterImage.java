@@ -15,10 +15,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.item.ItemPhotos;
 import com.example.util.Constant;
 import com.example.util.DBHelper;
 import com.example.util.JsonUtils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -26,6 +35,10 @@ import com.squareup.picasso.Picasso;
 import com.viaviapp.hdwallpaper.R;
 import com.viaviapp.hdwallpaper.RequestActivity;
 import com.viaviapp.hdwallpaper.SlideImageActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -37,6 +50,7 @@ import java.util.ArrayList;
 
 
 public class AdapterImage extends RecyclerView.Adapter{
+    static final String REQ_TAG = "VACTIVITY";
 
     private DBHelper dbHelper;
     private ArrayList<ItemPhotos> list;
@@ -49,12 +63,13 @@ public class AdapterImage extends RecyclerView.Adapter{
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageView, imageView_fav;
+        private ImageView imageView_fav;
+        private SimpleDraweeView imageView;
         private TextView textView_totviews;
 
         private MyViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.item);
+            imageView = (SimpleDraweeView) view.findViewById(R.id.item);
             textView_totviews = (TextView) view.findViewById(R.id.textView_totviews);
             imageView_fav = (ImageView) view.findViewById(R.id.imageView_favourite);
         }
@@ -99,6 +114,7 @@ public class AdapterImage extends RecyclerView.Adapter{
 //        }
 
     }
+    RequestQueue requestQueue;
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
@@ -110,10 +126,81 @@ public class AdapterImage extends RecyclerView.Adapter{
             ((MyViewHolder) holder).imageView.setLayoutParams(new RelativeLayout.LayoutParams(Constant.columnWidth, Constant.columnWidth));
             ((MyViewHolder) holder).textView_totviews.setText(list.get(position).getTotalViews());
 
-            Picasso.with(context)
-                    .load(list.get(position).getImageThumb().replace(" ", "%20"))
-                    .placeholder(R.mipmap.placeholder)
-                    .into(((MyViewHolder) holder).imageView);
+//            Picasso.with(context)
+//                    .load(list.get(position).getImageThumb().replace(" ", "%20"))
+//                    .placeholder(R.mipmap.placeholder)
+//                    .into(((MyViewHolder) holder).imageView);
+            final String url = list.get(position).getImage().replace(" ", "%20");
+//            if(url.substring(url.length()-3).equals("gif")){
+//                url = url.replace("/categories/"+ list.get(position).getId(),"/images/animation");
+//                DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                        .setUri(url)//list.get(position).getImage().replace(" ", "%20"))
+//                        .setAutoPlayAnimations(true)
+//                        .build();
+//                ((MyViewHolder) holder).imageView.setController(controller);
+//
+//            } else {
+//                DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                        .setUri(list.get(position).getImage().replace(" ", "%20"))
+//                        .setAutoPlayAnimations(true)
+//                        .build();
+//                ((MyViewHolder) holder).imageView.setController(controller);
+//            }
+
+            String finalUrl = url;
+
+            if(url.substring(url.length()-3).equals("gif")) {
+                ///////////////////////
+                requestQueue = Volley.newRequestQueue(context);
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //	serverResp.setText("String Response : "+ response);
+                                try {
+                                    //String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
+                                    JSONObject reader = new JSONObject(response);
+                                    JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
+                                    for (int i = 0; i < arrayOfObjs.length(); i++) {
+                                        JSONObject c = arrayOfObjs.getJSONObject(i);
+                                        String str = c.getString("gif_image");
+                                        if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))){
+                                            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                                                    .setUri(c.getString("gif_image"))//list.get(position).getImage().replace(" ", "%20"))
+                                                    .setAutoPlayAnimations(true)
+                                                    .build();
+                                            ((MyViewHolder) holder).imageView.setController(controller);
+                                        }
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //	serverResp.setText("Error getting response");
+                    }
+                });
+
+                stringRequest.setTag(REQ_TAG);
+                requestQueue.add(stringRequest);
+
+                ////
+//						url = url.replace("/categories/" + Constant.arrayList.get((Integer.parseInt(s))).getId(), "/images/animation");
+//						DraweeController controller = Fresco.newDraweeControllerBuilder()
+//								.setUri(url)//list.get(position).getImage().replace(" ", "%20"))
+//								.setAutoPlayAnimations(true)
+//								.build();
+//						imageView.setController(controller);
+            }else {
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(url)
+                        .setAutoPlayAnimations(true)
+                        .build();
+                ((MyViewHolder) holder).imageView.setController(controller);
+            }
 
             ((MyViewHolder) holder).imageView_fav.setOnClickListener(new View.OnClickListener() {
                 @Override

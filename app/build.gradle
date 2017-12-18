@@ -42,6 +42,7 @@ dependencies {
     compile 'com.onesignal:OneSignal:3.+@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.fresco:fresco:1.2.0'
+    compile 'com.android.volley:volley:1.1.0'
     compile 'com.facebook.fresco:animated-gif:1.2.0'
     compile files('libs/mail.jar')
     compile files('libs/activation.jar')
