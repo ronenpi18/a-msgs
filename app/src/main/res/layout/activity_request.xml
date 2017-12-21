@@ -24,14 +24,14 @@
         tools:text="@string/requesting" />
 
     <EditText
-        android:id="@+id/name2"
+        android:id="@+id/Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="404dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="@string/full_name"
+        android:hint="@string/email"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +97,7 @@
         android:layout_marginRight="8dp" />
 
     <FrameLayout
-        android:id="@+id/frameContainer"
+        android:id="@+id/frameContainer1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -138,7 +138,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:onClick="onClickGif"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/gif"

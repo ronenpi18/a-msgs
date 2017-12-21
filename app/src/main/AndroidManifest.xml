@@ -72,6 +72,7 @@
             android:value="7db58cbe8f843d861c8b48fcf39be1ccb0b7fa44" />
 
         <activity android:name=".SentActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -79,8 +80,17 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity
+            android:name=".temp"
+            android:label="@string/title_activity_temp"
+            android:theme="@style/AppTheme_blue" />
+        <activity
+            android:name=".temp2"
+            android:label="@string/title_activity_temp2"
+            android:theme="@style/AppTheme_blue"></activity>
     </application>
 
 </manifest>

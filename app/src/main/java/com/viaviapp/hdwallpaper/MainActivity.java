@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
 	JsonUtils utils;
 
+	SharedPreferences sp;
+	SharedPreferences.Editor spe;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -97,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		pbar.setMessage(getResources().getString(R.string.loading));
 		pbar.setCancelable(false);
 
+		sp = getSharedPreferences("sp",MODE_PRIVATE);
+		spe=sp.edit();
+		spe.clear();
+		spe.commit();
 		// Look up the AdView as a resource and load a request.
 		mAdView = (AdView) findViewById(R.id.adView);
 		mAdView.loadAd(new AdRequest.Builder().build());

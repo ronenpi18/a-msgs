@@ -43,7 +43,12 @@ public class RequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
-        editText = (EditText)findViewById(R.id.name2);
+
+        sp = getSharedPreferences("sp",MODE_PRIVATE);
+        spe=sp.edit();
+
+
+        editText = (EditText)findViewById(R.id.Email);
         text = (TextView)findViewById(R.id.texta);
         textView = (TextView)findViewById(R.id.text);
         name = (EditText)findViewById(R.id.name);
@@ -52,18 +57,18 @@ public class RequestActivity extends AppCompatActivity {
         gifs = (Button)findViewById(R.id.gifC);
         send = (Button)findViewById(R.id.Send);
         wallpaper = (Button)findViewById(R.id.wallC);
-
+//        Toast.makeText(this, String.valueOf(text==null), Toast.LENGTH_SHORT).show();
         fm = getSupportFragmentManager();
 
-        if(!readFromFile(getApplicationContext(),"email_data.txt").equals("") ||
-                !readFromFile(getApplicationContext(),"name_data.txt").equals("") ||
-                !readFromFile(getApplicationContext(),"phone_data.txt").equals("") ||
-                !readFromFile(getApplicationContext(),"details_data.txt").equals("")){
+        if(! sp.getString("email_address","").equals("") ||
+                ! sp.getString("name","").equals("") ||
+                ! sp.getString("phone","").equals("") ||
+                ! sp.getString("details","").equals("")){
 
-            editText.setText(readFromFile(getApplicationContext(),"email_data.txt"));
-            name.setText(readFromFile(getApplicationContext(),"name_data.txt"));
-            phone.setText(readFromFile(getApplicationContext(),"phone_data.txt"));
-            details.setText(readFromFile(getApplicationContext(),"details_data.txt"));
+            editText.setText(sp.getString("email_address",""));
+            name.setText(sp.getString("name",""));
+            phone.setText(sp.getString("phone",""));
+            details.setText(sp.getString("details",""));
         }
 //        else{
 //            editText.setText("");
@@ -76,7 +81,7 @@ public class RequestActivity extends AppCompatActivity {
             wallpaper.setVisibility(View.GONE);
             gifs.setEnabled(false);
             gifs.setVisibility(View.GONE);
-            text.setText("You've chosen GIF! Great!");
+         //   text.setText("You've chosen GIF! Great!");
             textView.setVisibility(View.GONE);
         }
         if(!readFromFile(getApplicationContext(),"wall_selected.txt").equals("")){
@@ -84,7 +89,8 @@ public class RequestActivity extends AppCompatActivity {
             wallpaper.setVisibility(View.GONE);
             gifs.setEnabled(false);
             gifs.setVisibility(View.GONE);
-            text.setText("You've chosen WallPaper! Great!");
+            Toast.makeText(this, "You've chosen WallPaper! Great!", Toast.LENGTH_SHORT).show();
+            //text.setText("You've chosen WallPaper! Great!");
             textView.setVisibility(View.GONE);
 
         }
@@ -102,6 +108,12 @@ public class RequestActivity extends AppCompatActivity {
                 onClickWall();
             }
         });
+        gifs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickGif();
+            }
+        });
 
     }
     public void loadFrag(Fragment f1, String name, FragmentManager fm) {
@@ -114,10 +126,8 @@ public class RequestActivity extends AppCompatActivity {
     }
 
 
-    public void onClickGif(View view) {
-//        int id = view.getId();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("choose", "started");
+    public void onClickGif() {
+        /*
 
         GIFFragment f1 = new GIFFragment();
 
@@ -128,8 +138,9 @@ public class RequestActivity extends AppCompatActivity {
 //        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 //        fragmentTransaction.commit();
         loadFrag(f1,"gif",fm);
-//
+//*/
 
+        startActivity(new Intent(this, temp2.class));
         send.setVisibility(View.GONE);
         gifs.setVisibility(View.GONE);
         wallpaper.setVisibility(View.GONE);
@@ -138,41 +149,60 @@ public class RequestActivity extends AppCompatActivity {
 //        SharedPreferences.Editor editor = pref.edit();
 //        editor.putBoolean("con", true);
         writeToFile("yay",getApplicationContext(),"isStGIF.txt");
+
+        spe.putString("email_address",editText.getText().toString());
+        spe.putString("name",name.getText().toString());
+        spe.putString("phone",phone.getText().toString());
+        spe.putString("details",details.getText().toString());
+
+        spe.commit();/*
 //        writeToFile(editText.getText().toString(),getApplicationContext(),"email_data.txt");
         writeToFile(name.getText().toString(),getApplicationContext(),"name_data.txt");
         writeToFile(phone.getText().toString(),getApplicationContext(),"phone_data.txt");
-        writeToFile(details.getText().toString(),getApplicationContext(),"details_data.txt");
+        writeToFile(details.getText().toString(),getApplicationContext(),"details_data.txt");*/
 
     }
-
+    SharedPreferences sp;
+    SharedPreferences.Editor spe;
 
 
     public void onClickWall() {
 //        int id = view.getId();
-        Bundle bundle = new Bundle();
-        bundle.putString("choose", "started");
+//        Bundle bundle = new Bundle();
+//        bundle.putString("choose", "started");
 //// set MyFragment Arguments
+        /*
         LatestFragment f1 = new LatestFragment();
 //        Intent i = new Intent(this,MainActivity.class);
 //        startActivity(i);
 //        loadFrag(f1,"gif",fm);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameContainer, f1);
+        fragmentTransaction.replace(R.id.frameContainer1, f1);
         fragmentTransaction.addToBackStack(f1.toString());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
+        startActivity(new Intent(this, temp.class));
         send.setVisibility(View.GONE);
         gifs.setVisibility(View.GONE);
         wallpaper.setVisibility(View.GONE);
 
-        f1.setArguments(bundle);
+//        f1.setArguments(bundle);
+
+
+        spe.putString("email_address",editText.getText().toString());
+        spe.putString("name",name.getText().toString());
+        spe.putString("phone",phone.getText().toString());
+        spe.putString("details",details.getText().toString());
+
+        spe.commit();
 
         writeToFile("yay",getApplicationContext(),"isStWall.txt");
-        writeToFile(editText.getText().toString(),getApplicationContext(),"email_data.txt");
+      /*  writeToFile(editText.getText().toString(),getApplicationContext(),"email_data.txt");
         writeToFile(name.getText().toString(),getApplicationContext(),"name_data.txt");
         writeToFile(phone.getText().toString(),getApplicationContext(),"phone_data.txt");
         writeToFile(details.getText().toString(),getApplicationContext(),"details_data.txt");
+        */
     }
 
 
@@ -266,7 +296,8 @@ public class RequestActivity extends AppCompatActivity {
         wallpaper.setVisibility(View.VISIBLE);
         gifs.setEnabled(true);
         gifs.setVisibility(View.VISIBLE);
-
+        spe.clear();
+        spe.commit();
     }
 
     public void onClickSend(){
@@ -274,6 +305,8 @@ public class RequestActivity extends AppCompatActivity {
     }
     public void open(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+//        Toast.makeText(this, readFromFile( getApplicationContext(),"email_data.txt"), Toast.LENGTH_SHORT).show();
         alertDialogBuilder.setMessage("Are you sure?");
                 alertDialogBuilder.setPositiveButton("yes",
                         new DialogInterface.OnClickListener() {
@@ -288,16 +321,24 @@ public class RequestActivity extends AppCompatActivity {
 
                                         GMailSender sender = new GMailSender("alivemessages1@gmail.com","PasswordForMail");
                                         try {
+                                            String email_address = sp.getString("email_address","");
+                                            String phone = sp.getString("phone","");
+                                            String details = sp.getString("details","");
+
+//                                            Toast.makeText(RequestActivity.this, email_address, Toast.LENGTH_SHORT).show();
                                             sender.sendMail("New Request",
-                                                    mailData (readFromFile( getApplicationContext(),"email_data.txt"),
-                                                              readFromFile(getApplicationContext(),"phone_data.txt"),
-                                                              readFromFile(getApplicationContext(),"details_data.txt"),
+                                                    mailData (
+                                                            email_address,
+                                                              phone,
+                                                              details,
                                                               readFromFile(getApplicationContext(),"gif_selected.txt"),
                                                               readFromFile(getApplicationContext(),"wall_selected.txt")),
                                                     "alivemessages1@gmail.com", "alivemessages1@gmail.com",
                                                     "");
+
+
                                             sender.sendMail("Alive messages - request","Hello\nThanks a lot for using Alive Messages. we promise to give you the top of the best. \nwe'll be in touch for further information... \n\nAliveMessages Team"
-                                            , "alivemessages1@gmail.com",readFromFile( getApplicationContext(),"email_data.txt"),"");
+                                            , "alivemessages1@gmail.com",email_address,"");
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }finally {
@@ -312,7 +353,8 @@ public class RequestActivity extends AppCompatActivity {
                                             writeToFile("",getApplicationContext(),"wall_selected.txt");
                                             writeToFile("",getApplicationContext(),"isStGIF.txt");
                                             writeToFile("",getApplicationContext(),"isStWall.txt");
-
+                                            spe.clear();
+                                            spe.commit();
                                         }
 
                                     }
