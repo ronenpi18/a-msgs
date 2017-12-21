@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -69,10 +70,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class SlideImageActivity extends AppCompatActivity implements SensorEventListener {
 
+public class SlideImageActivity extends AppCompatActivity implements SensorEventListener {
+	static final String REQ_TAG = "VACTIVITY";
 	DBHelper dbHelper;
 	int position;
+	RequestQueue requestQueue;
 	ViewPager viewpager;
 	int TOTAL_IMAGE;
 	private SensorManager sensorManager;
@@ -179,8 +182,57 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 				// TODO Auto-generated method stub
 
 				position=viewpager.getCurrentItem();
+				//////////
+				final String url =Constant.arrayList.get(position).getImage().replace(" ", "%20");
+				if(url.substring(url.length()-3).equals("gif")) {
+					///////////////////////
+					requestQueue = Volley.newRequestQueue(getApplicationContext());
+					StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
+							new Response.Listener<String>() {
+								@Override
+								public void onResponse(String response) {
+									//	serverResp.setText("String Response : "+ response);
+									try {
+										//String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
+										JSONObject reader = new JSONObject(response);
+										JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
+										for (int i = 0; i < arrayOfObjs.length(); i++) {
+											JSONObject c = arrayOfObjs.getJSONObject(i);
+											String str = c.getString("gif_image");
+											if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))){
+												(new ShareTask(SlideImageActivity.this)).execute(str);
+											}
+										}
 
-				(new ShareTask(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							}, new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							//	serverResp.setText("Error getting response");
+						}
+					});
+
+					stringRequest.setTag(REQ_TAG);
+					requestQueue.add(stringRequest);
+
+					////
+//						url = url.replace("/categories/" + Constant.arrayList.get((Integer.parseInt(s))).getId(), "/images/animation");
+//						DraweeController controller = Fresco.newDraweeControllerBuilder()
+//								.setUri(url)//list.get(position).getImage().replace(" ", "%20"))
+//								.setAutoPlayAnimations(true)
+//								.build();
+//						imageView.setController(controller);
+				}else {
+					(new ShareTask1(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+
+				}
+
+
+				/////////
+//				(new ShareTask(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
 
 
 				if (rightLabels.isExpanded()) {
@@ -251,20 +303,78 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 		fabsave.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				// TODO Auto-generated method stub
 
-				position=viewpager.getCurrentItem();
 
-				(new SaveTask(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+				final String url =Constant.arrayList.get(position).getImage().replace(" ", "%20");
+				if(url.substring(url.length()-3).equals("gif")) {
+					///////////////////////
+					requestQueue = Volley.newRequestQueue(getApplicationContext());
+					StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
+							new Response.Listener<String>() {
+								@Override
+								public void onResponse(String response) {
+									//	serverResp.setText("String Response : "+ response);
+									try {
+										//String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
+										JSONObject reader = new JSONObject(response);
+										JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
+										for (int i = 0; i < arrayOfObjs.length(); i++) {
+											JSONObject c = arrayOfObjs.getJSONObject(i);
+											String str = c.getString("gif_image");
+											if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))){
 
-				if (rightLabels.isExpanded()) {
+												position = viewpager.getCurrentItem();
 
-					Rect outRect = new Rect();
-					rightLabels.getGlobalVisibleRect(outRect);
+												(new SaveTask(SlideImageActivity.this)).execute(str);
 
-					if(!outRect.contains((int)v.getRight(), (int)v.getRight()))
-						rightLabels.collapse();
+												if (rightLabels.isExpanded()) {
+
+													Rect outRect = new Rect();
+													rightLabels.getGlobalVisibleRect(outRect);
+
+													if (!outRect.contains((int) v.getRight(), (int) v.getRight()))
+														rightLabels.collapse();
+												}											}
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							}, new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							//	serverResp.setText("Error getting response");
+						}
+					});
+
+					stringRequest.setTag(REQ_TAG);
+					requestQueue.add(stringRequest);
+
+					////
+//						url = url.replace("/categories/" + Constant.arrayList.get((Integer.parseInt(s))).getId(), "/images/animation");
+//						DraweeController controller = Fresco.newDraweeControllerBuilder()
+//								.setUri(url)//list.get(position).getImage().replace(" ", "%20"))
+//								.setAutoPlayAnimations(true)
+//								.build();
+//						imageView.setController(controller);
+				}else {
+					//	(new ShareTask1(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+
+					position = viewpager.getCurrentItem();
+
+					(new SaveTask(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+
+					if (rightLabels.isExpanded()) {
+
+						Rect outRect = new Rect();
+						rightLabels.getGlobalVisibleRect(outRect);
+
+						if (!outRect.contains((int) v.getRight(), (int) v.getRight()))
+							rightLabels.collapse();
+					}
 				}
 			}
 		});
@@ -733,6 +843,97 @@ public class SaveTask extends AsyncTask<String , String , String>
 		pDialog.dismiss();
 	}
 }
+	public class ShareTask1 extends AsyncTask<String , String , String>
+	{
+		private Context context;
+		private ProgressDialog pDialog;
+		String image_url;
+		URL myFileUrl;
+
+
+		String myFileUrl1;
+		Bitmap bmImg = null;
+		File file ;
+
+		public ShareTask1(Context context) {
+			this.context = context;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+
+			super.onPreExecute();
+
+			pDialog = new ProgressDialog(context,AlertDialog.THEME_HOLO_LIGHT);
+			pDialog.setMessage(getResources().getString(R.string.please_wait));
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+
+		}
+
+		@Override
+		protected String doInBackground(String... args) {
+			// TODO Auto-generated method stub
+
+			try {  
+
+				myFileUrl = new URL(args[0]);
+				//myFileUrl1 = args[0];
+
+				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+				conn.setDoInput(true);
+				conn.connect();
+				InputStream is = conn.getInputStream();
+				bmImg = BitmapFactory.decodeStream(is);
+			}
+			catch (IOException e)
+			{       
+				e.printStackTrace();  
+			}
+			try {       
+
+				String path = myFileUrl.getPath();
+				String idStr = path.substring(path.lastIndexOf('/') + 1);
+				File filepath = Environment.getExternalStorageDirectory();
+				File dir = new File (filepath.getAbsolutePath() + Constant.DOWNLOAD_SDCARD_FOLDER_PATH_WALLPAPER);
+				dir.mkdirs();
+				String fileName = idStr;
+				file = new File(dir, fileName);
+				FileOutputStream fos = new FileOutputStream(file);
+				bmImg.compress(CompressFormat.JPEG, 75, fos);   
+				fos.flush();    
+				fos.close();    
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();  
+			}
+			return null;   
+		}
+
+
+		@Override
+		protected void onPostExecute(String args) {
+			// TODO Auto-generated method stub
+			Intent install = new Intent(Intent.ACTION_SEND);
+//			Intent share = new Intent(Intent.ACTION_SEND);
+//			share.setType("image/jpeg");
+//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+			Uri apkURI = FileProvider.getUriForFile(
+					context,
+					context.getApplicationContext()
+							.getPackageName() + ".provider", file);
+			install.setDataAndType(apkURI, "image/jpeg");
+			install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			context.startActivity(install);
+			pDialog.dismiss();
+		}
+	}
+
 	public class ShareTask extends AsyncTask<String , String , String>
 	{
 		private Context context;
@@ -767,41 +968,43 @@ public class SaveTask extends AsyncTask<String , String , String>
 		protected String doInBackground(String... args) {
 			// TODO Auto-generated method stub
 
-			try {  
+			try {
 
 				myFileUrl = new URL(args[0]);
 				//myFileUrl1 = args[0];
+				file = new File(context.getExternalCacheDir(), "shared_gif" + System.currentTimeMillis() + ".gif");
 
-				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();   
-				conn.setDoInput(true);   
-				conn.connect();     
+				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+				conn.setDoInput(true);
+				conn.connect();
 				InputStream is = conn.getInputStream();
-				bmImg = BitmapFactory.decodeStream(is); 
+
+				BufferedInputStream bis = new BufferedInputStream(is);
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+				byte[] img = new byte[1024];
+
+
+				int current = 0;
+
+				while ((current = bis.read()) != -1) {
+					baos.write(current);
+				}
+
+				FileOutputStream fos = new FileOutputStream(file);
+				fos.write(baos.toByteArray());
+
+				fos.flush();
+
+				fos.close();
+				is.close();
 			}
 			catch (IOException e)
-			{       
-				e.printStackTrace();  
-			}
-			try {       
-
-				String path = myFileUrl.getPath();
-				String idStr = path.substring(path.lastIndexOf('/') + 1);
-				File filepath = Environment.getExternalStorageDirectory();
-				File dir = new File (filepath.getAbsolutePath() + Constant.DOWNLOAD_SDCARD_FOLDER_PATH_WALLPAPER);
-				dir.mkdirs();
-				String fileName = idStr;
-				file = new File(dir, fileName);
-				FileOutputStream fos = new FileOutputStream(file);
-				bmImg.compress(CompressFormat.JPEG, 75, fos);   
-				fos.flush();    
-				fos.close();    
-
-			}
-			catch (Exception e)
 			{
-				e.printStackTrace();  
+				e.printStackTrace();
 			}
-			return null;   
+			return null;
 		}
 
 
@@ -809,14 +1012,21 @@ public class SaveTask extends AsyncTask<String , String , String>
 		protected void onPostExecute(String args) {
 			// TODO Auto-generated method stub
 
-			Intent share = new Intent(Intent.ACTION_SEND);
-			share.setType("image/jpeg");
-			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+//			Intent share = new Intent(Intent.ACTION_SEND);
+//			share.setType("image/gif");
+//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+			Intent install = new Intent(Intent.ACTION_SEND);
+			Uri apkURI = FileProvider.getUriForFile(
+					context,
+					context.getApplicationContext()
+							.getPackageName() + ".provider", file);
+			install.setDataAndType(apkURI, "image/gif");
+			install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			context.startActivity(install);
 			pDialog.dismiss();
 		}
 	}
-
 	private void loadViewed(int pos) {
 		if (JsonUtils.isNetworkAvailable(this)) {
 			new MyTask().execute(Constant.URL_WALLPAPER+Constant.arrayList.get(pos).getId(),String.valueOf(pos));

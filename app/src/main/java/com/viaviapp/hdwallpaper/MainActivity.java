@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		toggle.syncState();
 
 		checkPer();
-//		writeToFile("",getApplicationContext(),"email_data.txt");
-//		writeToFile("",getApplicationContext(),"name_data.txt");
-//		writeToFile("",getApplicationContext(),"phone_data.txt");
-//		writeToFile("",getApplicationContext(),"details_data.txt");
+		writeToFile("",getApplicationContext(),"email_data.txt");
+		writeToFile("",getApplicationContext(),"name_data.txt");
+		writeToFile("",getApplicationContext(),"phone_data.txt");
+		writeToFile("",getApplicationContext(),"details_data.txt");
 //		writeToFile("",getApplicationContext(),"gif_selected.txt");
 //		writeToFile("",getApplicationContext(),"wall_selected.txt");
 //		writeToFile("",getApplicationContext(),"isStGIF.txt");
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		LatestFragment f1 = new LatestFragment();
 		loadFrag(f1,getResources().getString(R.string.latest),fm);
+		writeToFile("yay",getApplicationContext(),"isLTS.txt");
 //		toolbar.setTitle(getResources().getString(R.string.latest));
 		if(Locale.getDefault().getDisplayLanguage().equals("ru")){
 			toolbar.setTitle("последний");
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if (id == R.id.textView_latest) {
 			LatestFragment f1 = new LatestFragment();
 			loadFrag(f1,"latest",fm);
+			writeToFile("yay",getApplicationContext(),"isLTS.txt");
 			if(Locale.getDefault().getDisplayLanguage().toLowerCase().equals("ru")){
 				toolbar.setTitle("последний");
 				changeNavItemBG("последний");
@@ -222,8 +224,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		} else if (id == R.id.textView_cat) {
 			AllPhotosFragment f1 = new AllPhotosFragment();
 			loadFrag(f1,"cat",fm);
-			toolbar.setTitle(getResources().getString(R.string.category));
+			writeToFile("nay",getApplicationContext(),"isLTS.txt");
 
+			toolbar.setTitle(getResources().getString(R.string.category));
+			writeToFile("nay",getApplicationContext(),"isLTS.txt");
 			changeNavItemBG("cat");
 
 		} else if (id == R.id.textView_fav) {
@@ -244,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			//startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.play_more_apps))));
 			Intent i = new Intent(this,RequestActivity.class);
 			startActivity(i);
+
+
 		} else if(id == R.id.textView_rate) {
 			final String appName = getPackageName();//your application package name i.e play store application url
 			Log.e("package:", appName);
@@ -482,5 +488,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		return super.onKeyDown(keyCode, event);
 
 	}
+
+
 }
 

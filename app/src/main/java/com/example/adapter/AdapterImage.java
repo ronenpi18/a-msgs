@@ -149,44 +149,44 @@ public class AdapterImage extends RecyclerView.Adapter{
 
             String finalUrl = url;
 
+
             if(url.substring(url.length()-3).equals("gif")) {
                 ///////////////////////
-                requestQueue = Volley.newRequestQueue(context);
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                //	serverResp.setText("String Response : "+ response);
-                                try {
-                                    //String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
-                                    JSONObject reader = new JSONObject(response);
-                                    JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
-                                    for (int i = 0; i < arrayOfObjs.length(); i++) {
-                                        JSONObject c = arrayOfObjs.getJSONObject(i);
-                                        String str = c.getString("gif_image");
-                                        if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))){
-                                            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                                                    .setUri(c.getString("gif_image"))//list.get(position).getImage().replace(" ", "%20"))
-                                                    .setAutoPlayAnimations(true)
-                                                    .build();
-                                            ((MyViewHolder) holder).imageView.setController(controller);
+                    requestQueue = Volley.newRequestQueue(context);
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://panel.alivemessages.com//api.php?gif_list",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    //	serverResp.setText("String Response : "+ response);
+                                    try {
+                                        //String url = Constant.arrayList.get(Integer.parseInt(s)).getImage()) //.replace(" ","%20"
+                                        JSONObject reader = new JSONObject(response);
+                                        JSONArray arrayOfObjs = reader.getJSONArray("HD_WALLPAPER");
+                                        for (int i = 0; i < arrayOfObjs.length(); i++) {
+                                            JSONObject c = arrayOfObjs.getJSONObject(i);
+                                            String str = c.getString("gif_image");
+                                            if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))) {
+                                                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                                                        .setUri(str)//list.get(position).getImage().replace(" ", "%20"))
+                                                        .setAutoPlayAnimations(true)
+                                                        .build();
+                                                ((MyViewHolder) holder).imageView.setController(controller);
+                                            }
                                         }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //	serverResp.setText("Error getting response");
-                    }
-                });
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //	serverResp.setText("Error getting response");
+                        }
+                    });
 
-                stringRequest.setTag(REQ_TAG);
-                requestQueue.add(stringRequest);
-
+                    stringRequest.setTag(REQ_TAG);
+                    requestQueue.add(stringRequest);
                 ////
 //						url = url.replace("/categories/" + Constant.arrayList.get((Integer.parseInt(s))).getId(), "/images/animation");
 //						DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -270,6 +270,36 @@ public class AdapterImage extends RecyclerView.Adapter{
 
         try {
             InputStream inputStream = context.openFileInput("isStWall.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }
+
+    private String readFromFile2(Context context,String name) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput(name);
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);

@@ -65,7 +65,22 @@
         </service>
 
         <activity android:name=".ContactActivity" />
-        <activity android:name=".RequestActivity"></activity>
+        <activity android:name=".RequestActivity" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="7db58cbe8f843d861c8b48fcf39be1ccb0b7fa44" />
+
+        <activity android:name=".SentActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

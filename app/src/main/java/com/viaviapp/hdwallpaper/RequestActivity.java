@@ -30,19 +30,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import static android.widget.TextView.BufferType.EDITABLE;
+
 public class RequestActivity extends AppCompatActivity {
 
-    EditText email, name, phone, details;
+    EditText email, name, phone, details, editText;
     Button  wallpaper, gifs,send;
     TextView text, textView;
+    FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+        editText = (EditText)findViewById(R.id.name2);
         text = (TextView)findViewById(R.id.texta);
         textView = (TextView)findViewById(R.id.text);
-        email = (EditText)findViewById(R.id.email);
         name = (EditText)findViewById(R.id.name);
         phone = (EditText)findViewById(R.id.phone);
         details = (EditText)findViewById(R.id.details);
@@ -50,17 +53,24 @@ public class RequestActivity extends AppCompatActivity {
         send = (Button)findViewById(R.id.Send);
         wallpaper = (Button)findViewById(R.id.wallC);
 
+        fm = getSupportFragmentManager();
 
         if(!readFromFile(getApplicationContext(),"email_data.txt").equals("") ||
                 !readFromFile(getApplicationContext(),"name_data.txt").equals("") ||
                 !readFromFile(getApplicationContext(),"phone_data.txt").equals("") ||
                 !readFromFile(getApplicationContext(),"details_data.txt").equals("")){
 
-            email.setText(readFromFile(getApplicationContext(),"email_data.txt"));
+            editText.setText(readFromFile(getApplicationContext(),"email_data.txt"));
             name.setText(readFromFile(getApplicationContext(),"name_data.txt"));
             phone.setText(readFromFile(getApplicationContext(),"phone_data.txt"));
             details.setText(readFromFile(getApplicationContext(),"details_data.txt"));
         }
+//        else{
+//            editText.setText("");
+//            name.setText("");
+//            phone.setText("");
+//            details.setText("");
+//        }
         if(!readFromFile(getApplicationContext(),"gif_selected.txt").equals("")){
             wallpaper.setEnabled(false);
             wallpaper.setVisibility(View.GONE);
@@ -79,37 +89,56 @@ public class RequestActivity extends AppCompatActivity {
 
         }
 
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSend();
+            }
+        });
+
+        wallpaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickWall();
+            }
+        });
+
     }
     public void loadFrag(Fragment f1, String name, FragmentManager fm) {
         FragmentTransaction ft = fm.beginTransaction();
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.replace(R.id.frame_layout, f1, name);
+        ft.replace(R.id.frameContainer, f1, name);
+        ft.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
+
         ft.commit();
     }
 
 
-    public void onClick(View view) {
+    public void onClickGif(View view) {
 //        int id = view.getId();
-        Bundle bundle = new Bundle();
-        bundle.putString("choose", "started");
+//        Bundle bundle = new Bundle();
+//        bundle.putString("choose", "started");
 
         GIFFragment f1 = new GIFFragment();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameContainer, f1);
-        fragmentTransaction.addToBackStack(f1.toString());
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.frameContainer, f1);
+//        fragmentTransaction.addToBackStack(f1.toString());
+//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        fragmentTransaction.commit();
+        loadFrag(f1,"gif",fm);
+//
+
         send.setVisibility(View.GONE);
         gifs.setVisibility(View.GONE);
         wallpaper.setVisibility(View.GONE);
-        f1.setArguments(bundle);
+       // f1.setArguments(bundle);
 //        SharedPreferences pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = pref.edit();
 //        editor.putBoolean("con", true);
         writeToFile("yay",getApplicationContext(),"isStGIF.txt");
-        writeToFile(email.getText().toString(),getApplicationContext(),"email_data.txt");
+//        writeToFile(editText.getText().toString(),getApplicationContext(),"email_data.txt");
         writeToFile(name.getText().toString(),getApplicationContext(),"name_data.txt");
         writeToFile(phone.getText().toString(),getApplicationContext(),"phone_data.txt");
         writeToFile(details.getText().toString(),getApplicationContext(),"details_data.txt");
@@ -117,7 +146,8 @@ public class RequestActivity extends AppCompatActivity {
     }
 
 
-    public void onClickWall(View view) {
+
+    public void onClickWall() {
 //        int id = view.getId();
         Bundle bundle = new Bundle();
         bundle.putString("choose", "started");
@@ -139,7 +169,7 @@ public class RequestActivity extends AppCompatActivity {
         f1.setArguments(bundle);
 
         writeToFile("yay",getApplicationContext(),"isStWall.txt");
-        writeToFile(email.getText().toString(),getApplicationContext(),"email_data.txt");
+        writeToFile(editText.getText().toString(),getApplicationContext(),"email_data.txt");
         writeToFile(name.getText().toString(),getApplicationContext(),"name_data.txt");
         writeToFile(phone.getText().toString(),getApplicationContext(),"phone_data.txt");
         writeToFile(details.getText().toString(),getApplicationContext(),"details_data.txt");
@@ -239,7 +269,7 @@ public class RequestActivity extends AppCompatActivity {
 
     }
 
-    public void onClickSend(View view){
+    public void onClickSend(){
         open();
     }
     public void open(){
@@ -250,6 +280,7 @@ public class RequestActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 Toast.makeText(RequestActivity.this,"thanks",Toast.LENGTH_LONG).show();
+
                                 //new SendMail().execute("");
                                 Thread thread=new Thread(){
                                     @Override
@@ -270,7 +301,7 @@ public class RequestActivity extends AppCompatActivity {
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }finally {
-                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            Intent intent = new Intent(getApplicationContext(), SentActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             startActivity(intent);
                                             writeToFile("",getApplicationContext(),"email_data.txt");

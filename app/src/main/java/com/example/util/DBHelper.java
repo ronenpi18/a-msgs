@@ -13,10 +13,13 @@ import com.example.item.ItemCategory;
 import com.example.item.ItemGIF;
 import com.example.item.ItemPhotos;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -120,16 +123,45 @@ public class DBHelper extends SQLiteOpenHelper {
                 String views = cursor.getString(cursor.getColumnIndex("views"));
 
                 ItemPhotos itemPhotos = new ItemPhotos(pid,cid,img,img_thumb,cname,views);
-                arrayList.add(itemPhotos);
-
-                cursor.moveToNext();
+                if(!readFromFile2(context, "isLTS.txt").equals("yay")) {
+                    arrayList.add(itemPhotos);
+                    cursor.moveToNext();
+                }
             }
             cursor.close();
         }
 
         return arrayList;
     }
+    private String readFromFile2(Context context,String name) {
 
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput(name);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }
     public ArrayList<ItemGIF> getAllDataGIF(){
         ArrayList<ItemGIF> arrayList = new ArrayList<ItemGIF>();
 

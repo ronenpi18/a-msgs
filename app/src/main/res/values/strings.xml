@@ -48,7 +48,7 @@
     <string name="wallpapers">Wallpapers</string>
     <string name="gifs">GIFs</string>
     <string name="connect_net_load_gif">Please connect to internet to load GIFs</string>
-    <string name="latest">Latest</string>
+    <string name="latest">Wallpapers</string>
     <string name="category">Category</string>
     <string name="fav">Favourite</string>
     <string name="cannot_use_save">Cannot use save feature without requested permission</string>
@@ -68,12 +68,16 @@
     <string name="categories">Categories</string>
     <string name="privacy">Privacy Policy</string>
     <string name="choose">choose:</string>
-    <string name="wallpaper">Wallpaper</string>
+    <string name="wallpaper">wallpaper</string>
     <string name="gif">GIF</string>
     <string name="send">Send</string>
     <string name="email">Email</string>
     <string name="full_name">Full name</string>
     <string name="phone">Phone</string>
-    <string name="the_request_and_details">The request and details</string>
+    <string name="the_request_and_details">Text on screen</string>
+    <string name="email_address">Email Address</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

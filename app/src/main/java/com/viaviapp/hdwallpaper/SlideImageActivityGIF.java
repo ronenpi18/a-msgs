@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -687,11 +688,19 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
         @Override
         protected void onPostExecute(String args) {
             // TODO Auto-generated method stub
+            Intent install = new Intent(Intent.ACTION_VIEW);
 
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/gif");
-            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-            startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+            //Intent share = new Intent(Intent.ACTION_SEND);
+           // share.setType("image/gif");
+            //share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+          //  startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+            Uri apkURI = FileProvider.getUriForFile(
+                    context,
+                    context.getApplicationContext()
+                            .getPackageName() + ".provider", file);
+            install.setDataAndType(apkURI, "image/gif");
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(install);
             pDialog.dismiss();
         }
     }

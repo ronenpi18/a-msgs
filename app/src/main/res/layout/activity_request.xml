@@ -24,16 +24,16 @@
         tools:text="@string/requesting" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/name2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="404dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/name"
+        android:hint="@string/full_name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent" />
@@ -99,7 +99,9 @@
     <FrameLayout
         android:id="@+id/frameContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/texta"
@@ -121,14 +123,14 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="onClickWall"
         android:text="@string/wallpaper"
         app:layout_constraintBottom_toTopOf="@+id/Send"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toEndOf="@+id/text"
         app:layout_constraintTop_toBottomOf="@+id/details"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/gifC"
@@ -136,9 +138,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:onClick="onClickGif"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="onClick"
         android:text="@string/gif"
         app:layout_constraintBottom_toTopOf="@+id/Send"
         app:layout_constraintEnd_toStartOf="@+id/wallC"
@@ -155,7 +157,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="onClickSend"
         android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

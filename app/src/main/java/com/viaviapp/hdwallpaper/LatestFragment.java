@@ -47,7 +47,11 @@ public class LatestFragment extends Fragment {
 		dbHelper = new DBHelper(getActivity());
 
 		arrayOfLatestImage=new ArrayList<ItemPhotos>();
-
+		for(int i=0;i<arrayOfLatestImage.size();i++){
+			if(arrayOfLatestImage.get(i).getImage().substring(arrayOfLatestImage.size()-3).equals("gif")){
+				arrayOfLatestImage.remove(i);
+			}
+		}
 		lLayout = new GridLayoutManager(getActivity(), 2);
 		lLayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 			@Override
@@ -105,8 +109,18 @@ public class LatestFragment extends Fragment {
 		} else {
 			arrayOfLatestImage = dbHelper.getAllData("latest");
 			if(arrayOfLatestImage.size()==0) {
+				for(int i=0;i<arrayOfLatestImage.size();i++){
+					if(arrayOfLatestImage.get(i).getImage().substring(arrayOfLatestImage.size()-3).equals("gif")){
+						arrayOfLatestImage.remove(i);
+					}
+				}
 				Toast.makeText(getActivity(), getResources().getString(R.string.first_load_internet), Toast.LENGTH_SHORT).show();
 			} else {
+				for(int i=0;i<arrayOfLatestImage.size();i++){
+					if(arrayOfLatestImage.get(i).getImage().substring(arrayOfLatestImage.size()-3).equals("gif")){
+						arrayOfLatestImage.remove(i);
+					}
+				}
 				adapterImage = new AdapterImage(getActivity(),arrayOfLatestImage);
 				recyclerView.setAdapter(adapterImage);
 			}
@@ -168,7 +182,10 @@ public class LatestFragment extends Fragment {
 						ItemPhotos objItem = new ItemPhotos(id,cid,img,img_thumb,cat_name,views);
 
 						dbHelper.addtoFavorite(objItem,"latest");
-						arrayOfLatestImage.add(objItem);
+						if(!img.substring(img.length()-3).equals("gif")){
+							arrayOfLatestImage.add(objItem);
+
+						}
 					}
 
 				} catch (JSONException e) {
@@ -182,6 +199,7 @@ public class LatestFragment extends Fragment {
 	}
 
 	public void setAdapterToListview() {
+
 		if(arrayOfLatestImage.size()<11) {
 			adapterImage = new AdapterImage(getActivity(),arrayOfLatestImage);
 			recyclerView.setAdapter(adapterImage);
