@@ -689,18 +689,18 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
         protected void onPostExecute(String args) {
             // TODO Auto-generated method stub
 
-//			Intent share = new Intent(Intent.ACTION_SEND);
-//			share.setType("image/gif");
-//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
-            Intent install = new Intent(Intent.ACTION_SEND);
-            Uri apkURI = FileProvider.getUriForFile(
-                    context,
-                    context.getApplicationContext()
-                            .getPackageName() + ".provider", file);
-            install.setDataAndType(apkURI, "image/gif");
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(install);
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/gif");
+            if (android.os.Build.VERSION.SDK_INT >= 26){
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+
+            } else{
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+            }
+//            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
             pDialog.dismiss();
         }
     }

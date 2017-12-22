@@ -68,7 +68,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class SlideImageActivity extends AppCompatActivity implements SensorEventListener {
@@ -877,7 +879,7 @@ public class SaveTask extends AsyncTask<String , String , String>
 		protected String doInBackground(String... args) {
 			// TODO Auto-generated method stub
 
-			try {  
+			try {
 
 				myFileUrl = new URL(args[0]);
 				//myFileUrl1 = args[0];
@@ -889,10 +891,10 @@ public class SaveTask extends AsyncTask<String , String , String>
 				bmImg = BitmapFactory.decodeStream(is);
 			}
 			catch (IOException e)
-			{       
-				e.printStackTrace();  
+			{
+				e.printStackTrace();
 			}
-			try {       
+			try {
 
 				String path = myFileUrl.getPath();
 				String idStr = path.substring(path.lastIndexOf('/') + 1);
@@ -902,16 +904,16 @@ public class SaveTask extends AsyncTask<String , String , String>
 				String fileName = idStr;
 				file = new File(dir, fileName);
 				FileOutputStream fos = new FileOutputStream(file);
-				bmImg.compress(CompressFormat.JPEG, 75, fos);   
-				fos.flush();    
-				fos.close();    
+				bmImg.compress(CompressFormat.JPEG, 75, fos);
+				fos.flush();
+				fos.close();
 
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();  
+				e.printStackTrace();
 			}
-			return null;   
+			return null;
 		}
 
 
@@ -1011,15 +1013,15 @@ public class SaveTask extends AsyncTask<String , String , String>
 		@Override
 		protected void onPostExecute(String args) {
 			// TODO Auto-generated method stub
-
-			Intent install = new Intent(Intent.ACTION_SEND);
-//			install.setType("image/gif");
-//			install.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+//			Intent share = new Intent(Intent.ACTION_SEND);
+//			share.setType("image/gif");
+//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
 //			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
-//			Intent install = new Intent(Intent.ACTION_SEND);
+			Intent install = new Intent(Intent.ACTION_SEND);
+			install.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file.getPath()));
 			Uri apkURI = FileProvider.getUriForFile(
-					context,
-					context.getApplicationContext()
+					SlideImageActivity.this,
+					getApplicationContext()
 							.getPackageName() + ".provider", file);
 			install.setDataAndType(apkURI, "image/gif");
 			install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
