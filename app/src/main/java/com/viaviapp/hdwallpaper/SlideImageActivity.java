@@ -202,7 +202,7 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 											JSONObject c = arrayOfObjs.getJSONObject(i);
 											String str = c.getString("gif_image");
 											if (str.substring(str.lastIndexOf("_") + 1).equals(url.substring(url.lastIndexOf("_") + 1))){
-												(new ShareTask(SlideImageActivity.this)).execute(str);
+												(new ShareGIF(SlideImageActivity.this)).execute(str);
 											}
 										}
 
@@ -228,7 +228,7 @@ public class SlideImageActivity extends AppCompatActivity implements SensorEvent
 //								.build();
 //						imageView.setController(controller);
 				}else {
-					(new ShareTask1(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
+					(new ShareGIF1(SlideImageActivity.this)).execute(Constant.arrayList.get(position).getImage().replace(" ", "%20"));
 
 				}
 
@@ -936,7 +936,263 @@ public class SaveTask extends AsyncTask<String , String , String>
 		}
 	}
 
-	public class ShareTask extends AsyncTask<String , String , String>
+//	public class ShareTask extends AsyncTask<String , String , String>
+//	{
+//		private Context context;
+//		private ProgressDialog pDialog;
+//		String image_url;
+//		URL myFileUrl;
+//
+//
+//		String myFileUrl1;
+//		Bitmap bmImg = null;
+//		File file ;
+//
+//		public ShareTask(Context context) {
+//			this.context = context;
+//		}
+//
+//		@Override
+//		protected void onPreExecute() {
+//			// TODO Auto-generated method stub
+//
+//			super.onPreExecute();
+//
+//			pDialog = new ProgressDialog(context,AlertDialog.THEME_HOLO_LIGHT);
+//			pDialog.setMessage(getResources().getString(R.string.please_wait));
+//			pDialog.setIndeterminate(false);
+//			pDialog.setCancelable(false);
+//			pDialog.show();
+//
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... args) {
+//			// TODO Auto-generated method stub
+//
+//			try {
+//
+//				myFileUrl = new URL(args[0]);
+//				//myFileUrl1 = args[0];
+//				file = new File(context.getExternalCacheDir(), "shared_gif" + System.currentTimeMillis() + ".gif");
+//
+//				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+//				conn.setDoInput(true);
+//				conn.connect();
+//				InputStream is = conn.getInputStream();
+//
+//				BufferedInputStream bis = new BufferedInputStream(is);
+//
+//				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//
+//				byte[] img = new byte[1024];
+//
+//
+//				int current = 0;
+//
+//				while ((current = bis.read()) != -1) {
+//					baos.write(current);
+//				}
+//
+//				FileOutputStream fos = new FileOutputStream(file);
+//				fos.write(baos.toByteArray());
+//
+//				fos.flush();
+//
+//				fos.close();
+//				is.close();
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//			return null;
+//		}
+//
+//
+//		@Override
+//		protected void onPostExecute(String args) {
+//			// TODO Auto-generated method stub
+////			Intent share = new Intent(Intent.ACTION_SEND);
+////			share.setType("image/gif");
+////			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+////			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+//			Intent install = new Intent(Intent.ACTION_SEND);
+//			install.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file.getAbsolutePath()));
+//			Uri apkURI = FileProvider.getUriForFile(
+//					SlideImageActivity.this,
+//					getApplicationContext()
+//							.getPackageName() + ".provider", file);
+//			install.setDataAndType(apkURI, "image/gif");
+//			install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//			context.startActivity(install);
+//			pDialog.dismiss();
+//		}
+//	}
+//	private void loadViewed(int pos) {
+//		if (JsonUtils.isNetworkAvailable(this)) {
+//			new MyTask().execute(Constant.URL_WALLPAPER+Constant.arrayList.get(pos).getId(),String.valueOf(pos));
+//			dbHelper.updateView(Constant.arrayList.get(pos).getId(), Constant.arrayList.get(pos).getTotalViews());
+//		}
+//	}
+//
+//	private	class MyTask extends AsyncTask<String, Void, String> {
+//
+//		@Override
+//		protected void onPreExecute() {
+//			super.onPreExecute();
+//
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... params) {
+//			JsonUtils.getJSONString(params[0]);
+//			return params[1];
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String result) {
+//			super.onPostExecute(result);
+//
+//			int p = Integer.parseInt(result);
+//			int tot = Integer.parseInt(Constant.arrayList.get(p).getTotalViews());
+//			Constant.arrayList.get(p).setTotalViews(""+(tot+1));
+//		}
+//	}
+//
+//
+//}
+
+
+public class ShareGIF extends AsyncTask<String , String , String>
+{
+	private Context context;
+	private ProgressDialog pDialog;
+	String image_url;
+	URL myFileUrl;
+
+
+	String myFileUrl1;
+	Bitmap bmImg = null;
+	File file ;
+
+	public ShareGIF(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		// TODO Auto-generated method stub
+
+		super.onPreExecute();
+
+		pDialog = new ProgressDialog(context,AlertDialog.THEME_HOLO_LIGHT);
+		pDialog.setMessage(getResources().getString(R.string.please_wait));
+		pDialog.setIndeterminate(false);
+		pDialog.setCancelable(false);
+		pDialog.show();
+
+	}
+
+	@Override
+	protected String doInBackground(String... args) {
+		// TODO Auto-generated method stub
+
+		try {
+
+			myFileUrl = new URL(args[0]);
+			//myFileUrl1 = args[0];
+			file = new File(context.getExternalCacheDir(), "shared_gif" + System.currentTimeMillis() + ".gif");
+
+			HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+			conn.setDoInput(true);
+			conn.connect();
+			InputStream is = conn.getInputStream();
+
+			BufferedInputStream bis = new BufferedInputStream(is);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+			byte[] img = new byte[1024];
+
+
+			int current = 0;
+
+			while ((current = bis.read()) != -1) {
+				baos.write(current);
+			}
+
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(baos.toByteArray());
+
+			fos.flush();
+
+			fos.close();
+			is.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	@Override
+	protected void onPostExecute(String args) {
+		// TODO Auto-generated method stub
+
+		Intent share = new Intent(Intent.ACTION_SEND);
+		share.setType("image/gif");
+		if (android.os.Build.VERSION.SDK_INT >= 26){
+			share.putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(
+					SlideImageActivity.this,
+					getApplicationContext()
+							.getPackageName() + ".provider", file));// Uri.parse("content://" + file.getAbsolutePath()));
+//			Toast.makeText(context, String.valueOf(file.length()/1024), Toast.LENGTH_SHORT).show();
+		} else{
+			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+		}
+//            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+		share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+		startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+		pDialog.dismiss();
+	}
+}
+
+	private void loadViewed(int pos) {
+		if (JsonUtils.isNetworkAvailable(this)) {
+			new MyTask().execute(Constant.URL_WALLPAPER+Constant.arrayList.get(pos).getId(),String.valueOf(pos));
+			dbHelper.updateView(Constant.arrayList.get(pos).getId(), Constant.arrayList.get(pos).getTotalViews());
+		}
+	}
+
+	private	class MyTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			JsonUtils.getJSONString(params[0]);
+			return params[1];
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+//
+			int p = Integer.parseInt(result);
+			int tot = Integer.parseInt(Constant.arrayList.get(p).getTotalViews());
+			Constant.arrayList.get(p).setTotalViews(""+(tot+1));
+		}
+	}
+
+	public class ShareGIF1 extends AsyncTask<String , String , String>
 	{
 		private Context context;
 		private ProgressDialog pDialog;
@@ -948,7 +1204,7 @@ public class SaveTask extends AsyncTask<String , String , String>
 		Bitmap bmImg = null;
 		File file ;
 
-		public ShareTask(Context context) {
+		public ShareGIF1(Context context) {
 			this.context = context;
 		}
 
@@ -974,7 +1230,7 @@ public class SaveTask extends AsyncTask<String , String , String>
 
 				myFileUrl = new URL(args[0]);
 				//myFileUrl1 = args[0];
-				file = new File(context.getExternalCacheDir(), "shared_gif" + System.currentTimeMillis() + ".gif");
+				file = new File(context.getExternalCacheDir(), "shared_gif" + System.currentTimeMillis() + ".png");
 
 				HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
 				conn.setDoInput(true);
@@ -1013,52 +1269,23 @@ public class SaveTask extends AsyncTask<String , String , String>
 		@Override
 		protected void onPostExecute(String args) {
 			// TODO Auto-generated method stub
-//			Intent share = new Intent(Intent.ACTION_SEND);
-//			share.setType("image/gif");
-//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
-			Intent install = new Intent(Intent.ACTION_SEND);
-			install.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file.getPath()));
-			Uri apkURI = FileProvider.getUriForFile(
-					SlideImageActivity.this,
-					getApplicationContext()
-							.getPackageName() + ".provider", file);
-			install.setDataAndType(apkURI, "image/gif");
-			install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-			context.startActivity(install);
+
+			Intent share = new Intent(Intent.ACTION_SEND);
+			share.setType("image/*");
+			if (android.os.Build.VERSION.SDK_INT >= 26){
+				share.putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(
+						SlideImageActivity.this,
+						getApplicationContext()
+								.getPackageName() + ".provider", file));// Uri.parse("content://" + file.getAbsolutePath()));
+//				Toast.makeText(context, String.valueOf(file.length()/1024), Toast.LENGTH_SHORT).show();
+			} else{
+				share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+			}
+//            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+			share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
 			pDialog.dismiss();
 		}
 	}
-	private void loadViewed(int pos) {
-		if (JsonUtils.isNetworkAvailable(this)) {
-			new MyTask().execute(Constant.URL_WALLPAPER+Constant.arrayList.get(pos).getId(),String.valueOf(pos));
-			dbHelper.updateView(Constant.arrayList.get(pos).getId(), Constant.arrayList.get(pos).getTotalViews());
-		}
-	}
-
-	private	class MyTask extends AsyncTask<String, Void, String> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			JsonUtils.getJSONString(params[0]);
-			return params[1];
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-
-			int p = Integer.parseInt(result);
-			int tot = Integer.parseInt(Constant.arrayList.get(p).getTotalViews());
-			Constant.arrayList.get(p).setTotalViews(""+(tot+1));
-		}
-	}
-
-
 }

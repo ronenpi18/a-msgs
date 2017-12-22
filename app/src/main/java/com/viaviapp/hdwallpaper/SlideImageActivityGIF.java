@@ -692,8 +692,11 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("image/gif");
             if (android.os.Build.VERSION.SDK_INT >= 26){
-                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
-
+                share.putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(
+                        SlideImageActivityGIF.this,
+                        getApplicationContext()
+                                .getPackageName() + ".provider", file));// Uri.parse("content://" + file.getAbsolutePath()));
+//                Toast.makeText(context, String.valueOf(file.length()/1024), Toast.LENGTH_SHORT).show();
             } else{
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
             }
