@@ -36,7 +36,7 @@ public class RequestActivity extends AppCompatActivity {
 
     EditText email, name, phone, details, editText;
     Button  wallpaper, gifs,send;
-    TextView text, textView;
+    TextView text, textView,choose;
     FragmentManager fm;
 
     @Override
@@ -50,6 +50,7 @@ public class RequestActivity extends AppCompatActivity {
 
         editText = (EditText)findViewById(R.id.Email);
         text = (TextView)findViewById(R.id.texta);
+//        or = (TextView)findViewById(R.id.textView8);
         textView = (TextView)findViewById(R.id.text);
         name = (EditText)findViewById(R.id.name);
         phone = (EditText)findViewById(R.id.phone);
@@ -81,17 +82,24 @@ public class RequestActivity extends AppCompatActivity {
             wallpaper.setVisibility(View.GONE);
             gifs.setEnabled(false);
             gifs.setVisibility(View.GONE);
-         //   text.setText("You've chosen GIF! Great!");
             textView.setVisibility(View.GONE);
+          //  text.append("ok, you have chosen.");
+//            or.setText(R.string.chosen);
+            Toast.makeText(this, "You've chosen! Great!", Toast.LENGTH_SHORT).show();
+
+//            textView.setText(R.string.chosen);
         }
         if(!readFromFile(getApplicationContext(),"wall_selected.txt").equals("")){
             wallpaper.setEnabled(false);
             wallpaper.setVisibility(View.GONE);
             gifs.setEnabled(false);
+         //   text.append("ok, you have chosen.");
             gifs.setVisibility(View.GONE);
-            Toast.makeText(this, "You've chosen WallPaper! Great!", Toast.LENGTH_SHORT).show();
-            //text.setText("You've chosen WallPaper! Great!");
             textView.setVisibility(View.GONE);
+//            or.setText(R.string.chosen);
+            Toast.makeText(this, "You've chosen ! Great!", Toast.LENGTH_SHORT).show();
+//            or.setText(R.string.chosen);
+//            textView.setText(R.string.chosen);
 
         }
 
@@ -324,15 +332,16 @@ public class RequestActivity extends AppCompatActivity {
                                             String email_address = sp.getString("email_address","");
                                             String phone = sp.getString("phone","");
                                             String details = sp.getString("details","");
-
+                                            String url_wall = sp.getString("wall","");
+                                            String url_gif = sp.getString("gifu","");
 //                                            Toast.makeText(RequestActivity.this, email_address, Toast.LENGTH_SHORT).show();
                                             sender.sendMail("New Request",
                                                     mailData (
                                                             email_address,
                                                               phone,
                                                               details,
-                                                              readFromFile(getApplicationContext(),"gif_selected.txt"),
-                                                              readFromFile(getApplicationContext(),"wall_selected.txt")),
+                                                            url_gif,
+                                                              url_wall),
                                                     "alivemessages1@gmail.com", "alivemessages1@gmail.com",
                                                     "");
 

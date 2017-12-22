@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="or">or</string>
+    <string name="chosen">You\'ve chosen GIF! Great!</string>
+</resources>

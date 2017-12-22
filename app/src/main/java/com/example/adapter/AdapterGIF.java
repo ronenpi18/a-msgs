@@ -40,8 +40,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class AdapterGIF extends RecyclerView.Adapter{
+    SharedPreferences sp;
+    SharedPreferences.Editor spe;
 
     private DBHelper dbHelper;
     private ArrayList<ItemGIF> list;
@@ -155,6 +159,11 @@ public class AdapterGIF extends RecyclerView.Adapter{
                     Intent intslider = new Intent(context, SlideImageActivityGIF.class);
                     intslider.putExtra("POSITION_ID", position);
                     if(readFromFile(context).equals("yay")) {
+                        sp = context.getSharedPreferences("sp",MODE_PRIVATE);
+                        spe=sp.edit();
+                        spe.putString("gifu",list.get(position).getImage().replace(" ", "%20"));
+                        spe.commit();
+
                         writeToFile2(Integer.toString(position), context,"gif_selected.txt");
                         RequestActivity requestActivity= new RequestActivity();
                         requestActivity.finish();

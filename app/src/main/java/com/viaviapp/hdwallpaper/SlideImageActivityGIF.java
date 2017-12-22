@@ -688,12 +688,12 @@ public class SlideImageActivityGIF extends AppCompatActivity implements SensorEv
         @Override
         protected void onPostExecute(String args) {
             // TODO Auto-generated method stub
-            Intent install = new Intent(Intent.ACTION_VIEW);
 
-            //Intent share = new Intent(Intent.ACTION_SEND);
-           // share.setType("image/gif");
-            //share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-          //  startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+//			Intent share = new Intent(Intent.ACTION_SEND);
+//			share.setType("image/gif");
+//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+            Intent install = new Intent(Intent.ACTION_SEND);
             Uri apkURI = FileProvider.getUriForFile(
                     context,
                     context.getApplicationContext()

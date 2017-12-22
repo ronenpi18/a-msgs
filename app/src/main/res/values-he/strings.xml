@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Alive Messages</string>
+    <string name="desc">desc</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- admob id -->
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string><!-- your admob id -->
+    <string name="admob_intertestial_id">ca-app-pub-3940256099942544/1033173712</string><!-- your admob intertestal ad id -->
+
+    <!-- true if want to use RTL else false -->
+    <string name="isRTL">false</string>
+
+    <!-- play store application link i.e more apps -->
+    <string name="play_more_apps">https://play.google.com/store/apps/developer?id=Vishal+M+Parmar</string>
+
+    <string name="action_settings">הגדרות</string>
+    <string name="menu_about">אודות</string>
+    <string name="menu_moreapp">בקש עיצוב</string>
+    <string name="requesting">כדי ליצור רקע או גיף מותאמים אישית, בבקשה צור איתי קשר ובחר איזה גיף תרצה להתאים אישית.…</string>
+    <string name="menu_rateapp">דרג אפליקציה</string>
+    <string name="menu_back">חזור</string>
+    <string name="menu_share">שתף</string>
+    <string name="menu_save">שמור</string>
+    <string name="menu_zoom">Pinch Zoom</string>
+    <string name="menu_fav">Fav</string>
+    <string name="menu_setaswallpaper">SetsWallPaper</string>
+    <string name="menu_next">Next</string>
+    <string name="img_no">לא נמצא מועדף</string>
+    <string name="setaswallpaper">הגדר כרקע</string>
+    <string name="close">סגור</string>
+    <string name="transition_string">שלום</string>
+    <string name="no_cat">לא נמצאו קטגוריות</string>
+    <string name="no_wall">לא נמצאו רקעים</string>
+    <string name="no_gif">לא נמצאו גיפים</string>
+    <string name="no_latest">לא נמצאו פריטים אחרונים</string>
+    <string name="removed_fav">הוסר ממועדפים</string>
+    <string name="added_fav">נוסף למועדפים</string>
+    <string name="loading">טוען..</string>
+    <string name="first_load_internet">טעינת אפליקציה ראשונה מהאפליקציה</string>
+    <string name="no_data_found">לא נמצא מידע מהאתר</string>
+    <string name="no_more_data">אין עוד מידע</string>
+    <string name="wallpapers">רקעים</string>
+    <string name="gifs">גיפים</string>
+    <string name="connect_net_load_gif">אנא התחבר לאינטרנט על מנת לטעון עוד גיפים</string>
+    <string name="latest">רקעים</string>
+    <string name="category">קטגורייה</string>
+    <string name="fav">מועדף</string>
+    <string name="cannot_use_save">איו אפשרות להשתמש בשמירה ללא הגישות הנדרשות</string>
+    <string name="sure_quit">האם אתה בטוח שברצונך לצאת?</string>
+    <string name="yes">כן</string>
+    <string name="rateapp">דרג אפליקציה</string>
+    <string name="setting_wallpaper">מגדיר רקע..</string>
+    <string name="wallpaper_set">רקע הוגדר</string>
+    <string name="select">בחר</string>
+    <string name="download_image">מוריד תמונה</string>
+    <string name="image_save_success">התמונה נשמרה בהצלחה כרקע באיכות גבוהה</string>
+    <string name="please_wait">אנא המתן..</string>
+    <string name="share_image">שתף תמונה</string>
+    <string name="download_gif">מוריד גיף..</string>
+    <string name="gif_save_success">גיף נשמר בהצלחה כרגע באיכות גבוהה</string>
+    <string name="amazing_wall">רקעים מדהימים בדרך שלך</string>
+    <string name="categories">קטגוריות</string>
+    <string name="privacy">תנאי שימוש</string>
+    <string name="choose">בחר:</string>
+    <string name="wallpaper">רקע</string>
+    <string name="gif">גיף</string>
+    <string name="send">שלח</string>
+    <string name="email">מייל</string>
+    <string name="full_name">שם מלא</string>
+    <string name="phone">טלפון</string>
+    <string name="the_request_and_details">כיתוב על המסך</string>
+    <string name="email_address">כתובת מייל</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_temp">temp</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_temp2">temp2</string>
+    <string name="or">or</string>
+    <string name="chosen">You\'ve chosen GIF! Great!</string>
+
+</resources>

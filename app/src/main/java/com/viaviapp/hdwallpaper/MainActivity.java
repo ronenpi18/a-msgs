@@ -159,20 +159,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		loadFrag(f1,getResources().getString(R.string.latest),fm);
 		writeToFile("yay",getApplicationContext(),"isLTS.txt");
 //		toolbar.setTitle(getResources().getString(R.string.latest));
-		if(Locale.getDefault().getDisplayLanguage().equals("ru")){
-			toolbar.setTitle("последний");
-//			changeNavItemBG("последний");
-
-		}
-		if(Locale.getDefault().getDisplayLanguage().equals("he")){
-			toolbar.setTitle("אחרונים");
-//			changeNavItemBG("אחרונים");
-		}
-		else {
-			toolbar.setTitle(getResources().getString(R.string.latest));
+		toolbar.setTitle(getResources().getString(R.string.latest));
 
 //			changeNavItemBG("latest");
-		}
+
 
 		Typeface tf = Typeface.createFromAsset(getAssets(),"lator.ttf");
 		textView_latest.setTypeface(tf);

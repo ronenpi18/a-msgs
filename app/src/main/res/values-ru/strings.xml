@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Alive Messages</string>
+    <string name="desc">desc</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- admob id -->
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string><!-- your admob id -->
+    <string name="admob_intertestial_id">ca-app-pub-3940256099942544/1033173712</string><!-- your admob intertestal ad id -->
+
+    <!-- true if want to use RTL else false -->
+    <string name="isRTL">false</string>
+
+    <!-- play store application link i.e more apps -->
+    <string name="play_more_apps">https://play.google.com/store/apps/developer?id=Vishal+M+Parmar</string>
+
+
+    <!-- Change this according to your language -->
+    <string name="action_settings">настройки</string>
+    <string name="menu_about">О нас</string>
+    <string name="menu_moreapp">личный дизайн</string>
+    <string name="requesting">Чтобы создать личный обои или GIF, свяжитесь со мной и выберите, что вы хотели бы персонализировать …</string>
+    <string name="menu_rateapp">RateApp</string>
+    <string name="menu_back">Back</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_zoom">Pinch Zoom</string>
+    <string name="menu_fav">Fav</string>
+    <string name="menu_setaswallpaper">SetsWallPaper</string>
+    <string name="menu_next">следующий</string>
+    <string name="img_no">Нет избранных</string>
+    <string name="setaswallpaper">Установить как обои</string>
+    <string name="close">Закрыть</string>
+    <string name="transition_string">Здравствуйте</string>
+    <string name="no_cat">Категории не найдены</string>
+    <string name="no_wall">Обои не найдены</string>
+    <string name="no_gif">GIF не найден</string>
+    <string name="no_latest">Нет новых элементов</string>
+    <string name="removed_fav">Удалено из избранного</string>
+    <string name="added_fav">Добавлено в избранное</string>
+    <string name="loading">загрузка..</string>
+    <string name="first_load_internet">Приложение для загрузки в первый раз из Интернета</string>
+    <string name="no_data_found">Нет данных из сети</string>
+    <string name="no_more_data">Больше нет данных</string>
+    <string name="wallpapers">Обои</string>
+    <string name="gifs">GIFs</string>
+    <string name="connect_net_load_gif">Пожалуйста, подключитесь к Интернету для загрузки GIF</string>
+    <string name="latest">Обои</string>
+    <string name="category">категория</string>
+    <string name="fav">любимец</string>
+    <string name="cannot_use_save">Невозможно использовать функцию сохранения без разрешения пользователя</string>
+    <string name="sure_quit">Вы уверены, что хотите выйти?</string>
+    <string name="yes">да</string>
+    <string name="rateapp">приложение для оценки</string>
+    <string name="setting_wallpaper">загрузка..</string>
+    <string name="wallpaper_set">Набор обоев</string>
+    <string name="select">Выбрать</string>
+    <string name="download_image">Загрузка изображения..</string>
+    <string name="image_save_success">обои успешно сохранен в HD Wallpaper</string>
+    <string name="please_wait">загрузка..</string>
+    <string name="share_image">Поделиться</string>
+    <string name="download_gif">Загрузка GIF…</string>
+    <string name="gif_save_success">GIF успешно сохранен в HD Wallpaper</string>
+    <string name="amazing_wall">Удивительные обои и GIF</string>
+    <string name="categories">категории</string>
+    <string name="privacy">политика конфиденциальности</string>
+    <string name="choose">выберите:</string>
+    <string name="wallpaper">обои</string>
+    <string name="gif">GIF</string>
+    <string name="send">послать</string>
+    <string name="email">Эл. адрес</string>
+    <string name="full_name">Полное имя</string>
+    <string name="phone">Телефон</string>
+    <string name="the_request_and_details">Текст на экране</string>
+    <string name="email_address">Адрес электронной почты</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_temp">temp</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_temp2">temp2</string>
+    <string name="or">or</string>
+    <string name="chosen">You\'ve chosen GIF! Great!</string>
+
+</resources>

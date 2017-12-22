@@ -2,6 +2,7 @@ package com.example.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,9 +49,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class AdapterImage extends RecyclerView.Adapter{
     static final String REQ_TAG = "VACTIVITY";
+    SharedPreferences sp;
+    SharedPreferences.Editor spe;
 
     private DBHelper dbHelper;
     private ArrayList<ItemPhotos> list;
@@ -225,6 +230,11 @@ public class AdapterImage extends RecyclerView.Adapter{
                 @Override
                 public void onClick(View view) {
                     if(readFromFile(context).equals("yay")) {
+                        sp = context.getSharedPreferences("sp",MODE_PRIVATE);
+                        spe=sp.edit();
+                        spe.putString("wall",url);
+                        spe.commit();
+
                         writeToFile2(Integer.toString(position), context,"wall_selected.txt");
                         RequestActivity requestActivity = new RequestActivity();
                         requestActivity.finish();
@@ -246,7 +256,7 @@ public class AdapterImage extends RecyclerView.Adapter{
     }
     private void writeToFile(String data,Context context) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("pos.txt", Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("pos.txt", MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
         }
@@ -256,7 +266,7 @@ public class AdapterImage extends RecyclerView.Adapter{
     }
     private void writeToFile2(String data,Context context,String name) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(name, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(name, MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
         }

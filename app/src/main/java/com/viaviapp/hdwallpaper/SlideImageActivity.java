@@ -1012,11 +1012,11 @@ public class SaveTask extends AsyncTask<String , String , String>
 		protected void onPostExecute(String args) {
 			// TODO Auto-generated method stub
 
-//			Intent share = new Intent(Intent.ACTION_SEND);
-//			share.setType("image/gif");
-//			share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
 			Intent install = new Intent(Intent.ACTION_SEND);
+//			install.setType("image/gif");
+//			install.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+//			startActivity(Intent.createChooser(share, getResources().getString(R.string.share_image)));
+//			Intent install = new Intent(Intent.ACTION_SEND);
 			Uri apkURI = FileProvider.getUriForFile(
 					context,
 					context.getApplicationContext()

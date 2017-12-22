@@ -126,7 +126,7 @@
         android:text="@string/wallpaper"
         app:layout_constraintBottom_toTopOf="@+id/Send"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.569"
+        app:layout_constraintHorizontal_bias="0.731"
         app:layout_constraintStart_toEndOf="@+id/text"
         app:layout_constraintTop_toBottomOf="@+id/details"
         app:layout_constraintVertical_bias="1.0"
@@ -143,7 +143,7 @@
         android:text="@string/gif"
         app:layout_constraintBottom_toTopOf="@+id/Send"
         app:layout_constraintEnd_toStartOf="@+id/wallC"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/text"
         app:layout_constraintTop_toBottomOf="@+id/details"
         app:layout_constraintVertical_bias="1.0" />
@@ -162,4 +162,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/details"
         app:layout_constraintVertical_bias="0.503" />
+
 </android.support.constraint.ConstraintLayout>
