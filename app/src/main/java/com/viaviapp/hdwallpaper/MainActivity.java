@@ -154,12 +154,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		textView_privacy.setOnClickListener(this);
 		textView_setting.setOnClickListener(this);
 		textView_gif.setOnClickListener(this);
-
-		LatestFragment f1 = new LatestFragment();
-		loadFrag(f1,getResources().getString(R.string.latest),fm);
+		AllPhotosFragment f1 = new AllPhotosFragment();
+//		LatestFragment f1 = new LatestFragment();
+		loadFrag(f1,getResources().getString(R.string.category),fm);
 		writeToFile("yay",getApplicationContext(),"isLTS.txt");
 //		toolbar.setTitle(getResources().getString(R.string.latest));
-		toolbar.setTitle(getResources().getString(R.string.latest));
+		toolbar.setTitle(getResources().getString(R.string.category));
+		changeNavItemBG("cat");
 
 //			changeNavItemBG("latest");
 
@@ -204,20 +205,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			LatestFragment f1 = new LatestFragment();
 			loadFrag(f1,"latest",fm);
 			writeToFile("yay",getApplicationContext(),"isLTS.txt");
-			if(Locale.getDefault().getDisplayLanguage().toLowerCase().equals("ru")){
-				toolbar.setTitle("последний");
-				changeNavItemBG("последний");
+			toolbar.setTitle(getResources().getString(R.string.latest));
 
-			}
-			if(Locale.getDefault().getDisplayLanguage().toLowerCase().equals("he")){
-				toolbar.setTitle("אחרונים");
-				changeNavItemBG("אחרונים");
-			}
-			else {
-				toolbar.setTitle(getResources().getString(R.string.latest));
+			changeNavItemBG("latest");
 
-				changeNavItemBG("latest");
-			}
 		} else if (id == R.id.textView_cat) {
 			AllPhotosFragment f1 = new AllPhotosFragment();
 			loadFrag(f1,"cat",fm);
@@ -393,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	private void setDevelopedBy() {
-		textView_developedby.setText("Developed By: "+Constant.itemAbout.getDevelopedby());
+		//textView_developedby.setText("Developed By: "+Constant.itemAbout.getDevelopedby());
 	}
 
 	protected void onStart() {
